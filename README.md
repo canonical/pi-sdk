@@ -1,4 +1,4 @@
-# Pi Coding Agent CLI SDK for Workshop
+# Pi SDK for Workshop
 
 This SDK provides the Pi Coding Agent for AI-assisted coding within a
 workshop. The agent is sandboxed in the workshop container. Credentials are
@@ -15,7 +15,7 @@ A minimal workshop:
 name: pi-env
 base: ubuntu@24.04
 sdks:
-  - name: pi-coding-agent
+  - name: pi
     channel: latest/stable
 
 actions:
@@ -68,7 +68,7 @@ pi to read files, write code, run commands, and navigate your project.
 
   ```bash
   workshop stop <workshop-name>
-  workshop remount <workshop-name>/pi-coding-agent:pi-config ~/.pi
+  workshop remount <workshop-name>/pi:pi-config ~/.pi
   workshop start <workshop-name>
   ```
 
@@ -101,7 +101,7 @@ All contributions, including code, documentation updates, and issue reports,
 are welcome!
 
 - Open issues or pull requests on the
-  [official repository](https://github.com/canonical/pi-coding-agent-sdk).
+  [official repository](https://github.com/canonical/pi-sdk).
 
 ---
 
