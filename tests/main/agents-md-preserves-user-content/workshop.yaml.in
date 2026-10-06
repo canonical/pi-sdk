@@ -1,4 +1,4 @@
 name: test-pi
 base: ${BASE}
 sdks:
-  - name: try-pi-coding-agent
+  - name: try-pi

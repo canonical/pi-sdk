@@ -1,5 +1,5 @@
-name: pi-coding-agent
-title: Pi Coding Agent CLI SDK
+name: pi
+title: Pi SDK
 adopt-info: pi
 summary: Pi Coding Agent CLI - AI-powered coding assistant for the terminal
 description: |
@@ -7,7 +7,7 @@ description: |
   workshop. The agent is sandboxed in the workshop container. Credentials are
   persisted between workshop updates.
 license: MIT
-website: https://github.com/canonical/pi-coding-agent-sdk
+website: https://github.com/canonical/pi-sdk
 build-base: ubuntu@24.04
 platforms:
   # Build each arch natively: npm-include-node downloads node for the build
