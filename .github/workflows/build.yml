@@ -9,6 +9,42 @@ concurrency:
   group: ${{ github.workflow }}-${{ github.ref || github.run_id }}
   cancel-in-progress: true
 
+# The PR gate builds and tests amd64 only. pi declares a native arm64 platform
+# (build-on: [arm64]) that cannot be built on an amd64 host, so a bare
+# `sdkcraft pack` would try to emulate it and hang. arm64 is built natively at
+# upload time instead (see upload.yml). Running on a GitHub-hosted runner (not
+# self-hosted) also avoids the maintainer-approval gate that GitHub imposes on
+# self-hosted runners for fork pull requests.
 jobs:
   build:
-    uses: canonical/sdkcraft-actions/.github/workflows/build.yml@main
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+      - name: Install LXD
+        uses: canonical/setup-lxd@8c6a87bfb56aa48f3fb9b830baa18562d8bfd4ee # v1
+        with:
+          channel: 6/stable
+
+      - name: Install sdkcraft
+        uses: nick-fields/retry@ce71cc2ab81d554ebbe88c79ab5975992d79ba08 # v3.0.2
+        with:
+          max_attempts: 3
+          retry_wait_seconds: 60
+          timeout_minutes: 10
+          command: sudo snap install sdkcraft --edge --classic
+
+      - name: Pack SDK for amd64
+        uses: nick-fields/retry@ce71cc2ab81d554ebbe88c79ab5975992d79ba08 # v3.0.2
+        with:
+          max_attempts: 3
+          retry_wait_seconds: 60
+          timeout_minutes: 120
+          command: sdkcraft --verbose pack --build-for amd64
+
+      - name: Run tests
+        run: |
+          if [ -f tests/spread.yaml ]; then
+            sdkcraft --verbose test
+          else
+            echo "No tests/spread.yaml found – skipping."
+          fi
